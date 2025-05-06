@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: gunicorn vibrocia.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=your-secret-key
+      - DOCKER_COMPOSE=1
+    depends_on:
+      - mongo
+      - ai-service
+
+  mongo:
+    image: mongo:6.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo_user
+      - MONGO_INITDB_ROOT_PASSWORD=mongo_password
+      - MONGO_INITDB_DATABASE=vibrocia_db
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  ai-service:
+    build:
+      context: ./ai_service
+      dockerfile: Dockerfile
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./ai_service:/app
+
+volumes:
+  mongo_data:
+  static_volume:
+  media_volume:

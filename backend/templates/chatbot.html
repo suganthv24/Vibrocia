@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Vibrocia - Chatbot{% endblock %}
+
+{% block content %}
+<h2>Chatbot</h2>
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+<form id="chatbot-form" method="post" action="{% url 'chatbot:chatbot' %}">
+    {% csrf_token %}
+    <input type="text" name="message" placeholder="Type your message..." required>
+    <button type="submit">Send</button>
+</form>
+<div id="response">
+    {% if response %}
+        <p><strong>AI:</strong> {{ response }}</p>
+    {% endif %}
+</div>
+
+<script>
+    // Optional: Add AJAX for form submission
+    document.getElementById('chatbot-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        try {
+            const response = await fetch("{% url 'chatbot:chatbot' %}", {
+                method: 'POST',
+                body: JSON.stringify({ message: formData.get('message') }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+            const data = await response.json();
+            if (data.response) {
+                document.getElementById('response').innerHTML = `<p><strong>AI:</strong> ${data.response}</p>`;
+            } else if (data.error) {
+                document.getElementById('response').innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+            }
+        } catch (error) {
+            document.getElementById('response').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        }
+    });
+</script>
+{% endblock %}

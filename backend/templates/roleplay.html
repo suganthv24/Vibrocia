@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Roleplay{% endblock %}
+
+{% block content %}
+<h2>Roleplay Scenarios</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="scenario">Scenario:</label>
+    <textarea name="scenario" required></textarea>
+    <label for="response">Your Response:</label>
+    <textarea name="response" required></textarea>
+    <button type="submit">Submit</button>
+</form>
+<h3>Your Roleplays</h3>
+<ul>
+{% for roleplay in roleplays %}
+    <li>{{ roleplay.scenario }} - Score: {{ roleplay.score }} - Feedback: {{ roleplay.feedback }}</li>
+{% empty %}
+    <li>No roleplays yet.</li>
+{% endfor %}
+</ul>
+{% endblock %}
