@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Vibrocia - Daily Challenges{% endblock %}
+{% block content %}
+<h2>Daily Challenges</h2>
+{% if challenges %}
+    <ul>
+    {% for challenge in challenges %}
+        <li>{{ challenge.title }} - {{ challenge.description }} ({{ challenge.xp_reward }} XP)</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No challenges available at this time.</p>
+{% endif %}
+{% endblock %}

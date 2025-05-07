@@ -9,8 +9,8 @@
 from django.urls import path
 from . import views
 
-app_name = 'chatbot'
+app_name = 'learning'
 
 urlpatterns = [
-    path('', views.ChatbotView.as_view(), name='chatbot'),
+    path('', views.learning_view, name='learning'),
 ]

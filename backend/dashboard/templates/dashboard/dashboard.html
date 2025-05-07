@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Vibrocia - Dashboard{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+    <h3>Your Progress</h3>
+    <h4>Challenges</h4>
+    {% if challenges %}
+        <ul>
+        {% for progress in challenges %}
+            <li>
+                {{ progress.challenge.title }} 
+                {% if progress.completed %}
+                    <span style="color: green;">✔ Completed</span>
+                {% else %}
+                    <span>In Progress</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No challenges started yet. Visit <a href="{% url 'challenges:challenge_list' %}">Daily Challenges</a> to begin.</p>
+    {% endif %}
+    <h4>Learning Modules</h4>
+    {% if learning_logs %}
+        <ul>
+        {% for log in learning_logs %}
+            <li>
+                {{ log.module.title }} 
+                {% if log.completed %}
+                    <span style="color: green;">✔ Completed</span>
+                {% else %}
+                    <span>In Progress</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No modules started yet. Visit <a href="{% url 'learning:learning' %}">Learning Modules</a> to begin.</p>
+    {% endif %}
+    <h3>Explore More</h3>
+    <ul>
+        <li><a href="{% url 'learning:learning' %}">Learning Modules</a></li>
+        <li><a href="{% url 'survey:survey_list' %}">Surveys</a></li>
+        <li><a href="{% url 'chatbot:chatbot' %}">Chatbot</a></li>
+        <li><a href="{% url 'challenges:challenge_list' %}">Daily Challenges</a></li>
+    </ul>
+{% else %}
+    <p>Please <a href="{% url 'accounts:login' %}">log in</a> to access your dashboard.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Learning Modules{% endblock %}
+{% block content %}
+<h2>Learning Modules</h2>
+{% if modules %}
+    <ul>
+    {% for module in modules %}
+        <li>{{ module.title }} - {{ module.category }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No modules available.</p>
+{% endif %}
+{% endblock %}

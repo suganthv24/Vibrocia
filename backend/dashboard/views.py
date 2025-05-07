@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from challenges.models import ChallengeProgress
-from learning.models import ModuleProgress
+from learning.models import LearningLog
 
 @login_required
-def dashboard(request):
+def dashboard_view(request):
+    """Render the user dashboard with challenge and learning progress."""
     challenges = ChallengeProgress.objects.filter(user=request.user)
-    modules = ModuleProgress.objects.filter(user=request.user)
-    return render(request, 'dashboard.html', {
+    learning_logs = LearningLog.objects.filter(user=request.user)
+    return render(request, 'dashboard/dashboard.html', {
         'challenges': challenges,
-        'modules': modules,
+        'learning_logs': learning_logs,
         'user': request.user
     })
