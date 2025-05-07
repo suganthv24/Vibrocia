@@ -4,32 +4,246 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Vibrocia{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background: #333; color: white; padding: 10px; text-align: center; }
-        nav { background: #444; padding: 10px; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; }
-        nav a:hover { text-decoration: underline; }
-        .content { padding: 20px; }
-        footer { background: #333; color: white; text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            color: #333;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 50px;
+            background: transparent;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00c4cc;
+        }
+
+        .logo::before {
+            content: 'V';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #00c4cc;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #00c4cc;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .auth-buttons a {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons a.login {
+            border: 1px solid #00c4cc;
+            color: #00c4cc;
+            background: transparent;
+        }
+
+        .auth-buttons a.login:hover {
+            background: #00c4cc;
+            color: white;
+        }
+
+        .auth-buttons a.signup {
+            background: #00c4cc;
+            color: white;
+            border: none;
+        }
+
+        .auth-buttons a.signup:hover {
+            background: #00a0a6;
+        }
+
+        .content {
+            position: relative;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px 50px;
+            overflow: hidden;
+            animation: slideIn 1s ease-out;
+        }
+
+        .content::before,
+        .content::after {
+            content: '';
+            position: absolute;
+            background: rgba(0, 196, 204, 0.1);
+            border-radius: 50%;
+        }
+
+        .content::before {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            right: 10%;
+            z-index: -1;
+        }
+
+        .content::after {
+            width: 200px;
+            height: 200px;
+            bottom: 20%;
+            right: 15%;
+            z-index: -1;
+        }
+
+        .content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .content h1 span {
+            color: #00c4cc;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+
+        .content .buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .content .buttons a {
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .content .buttons a.get-started {
+            background: #00c4cc;
+            color: white;
+        }
+
+        .content .buttons a.get-started:hover {
+            background: #00a0a6;
+        }
+
+        .content .buttons a.watch-demo {
+            border: 1px solid #00c4cc;
+            color: #00c4cc;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .content .buttons a.watch-demo:hover {
+            background: #00c4cc;
+            color: white;
+        }
+
+        footer {
+            background: transparent;
+            color: #666;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Vibrocia</h1>
+        <div class="logo">Vibrocia</div>
+        <nav>
+            <a href="{% url 'dashboard:root_dashboard' %}">DashBoard</a>
+            <a href="{% url 'learning:learning' %}">Learning</a>
+            <a href="{% url 'challenges:challenge_list' %}">Challenges</a>
+            <a href="{% url 'survey:survey_list' %}">Survey</a>
+            <a href="{% url 'chatbot:chatbot' %}">Chatbot</a>
+            <a href="{% url 'gamification:gamification' %}">Gamification</a>
+            <a href="{% url 'roleplay:roleplay' %}">Roleplay</a>
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:logout' %}" class="login">Logout</a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="login">Log in</a>
+                {% endif %}
+            </div>
+        </nav>
     </header>
-    <nav>
-        <a href="{% url 'dashboard:dashboard' %}">Dashboard</a>
-        <a href="{% url 'learning:learning' %}">Learning</a>
-        <a href="{% url 'challenges:challenge_list' %}">Challenges</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'accounts:logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'accounts:login' %}">Login</a>
-        {% endif %}
-    </nav>
     <div class="content">
         {% block content %}
+            <h1>Find Your Voice.<br>Build Your <span>Confidence.</span></h1>
+            <p>Vibrocia helps students overcome fear of communication, boost confidence, and grow into expressive, socially ready individuals.</p>
+            <div class="buttons">
+                <a href="{% url 'accounts:signup' %}" class="get-started">Get Started</a>
+                <a href="#" class="watch-demo">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </a>
+            </div>
         {% endblock %}
     </div>
     <footer>

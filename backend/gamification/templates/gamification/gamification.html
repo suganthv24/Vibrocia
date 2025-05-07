@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
-
-{% block title %}Tracker{% endblock %}
-
+{% block title %}Vibrocia - Gamification{% endblock %}
 {% block content %}
-<h2>Your Badges</h2>
-<ul>
-{% for badge in badges %}
-    <li>{{ badge.badge.name }} - Awarded on {{ badge.awarded_at }}</li>
-{% empty %}
-    <li>No badges yet.</li>
-{% endfor %}
-</ul>
+<h2>Gamification</h2>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+    <h3>Your Badges</h3>
+    {% if badges %}
+        <ul>
+        {% for badge in badges %}
+            <li>{{ badge.name }} - {{ badge.description }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No badges earned yet. Complete challenges to earn badges!</p>
+    {% endif %}
+    <h3>Your Points</h3>
+    <p>Total Points: {{ total_points }}</p>
+{% else %}
+    <p>Please <a href="{% url 'accounts:login' %}">log in</a> to view your gamification progress.</p>
+{% endif %}
 {% endblock %}

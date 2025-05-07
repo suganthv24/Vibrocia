@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from .models import UserBadge
 
 @login_required
-def tracker(request):
+def gamification_view(request):
+    """Render the gamification page with user badges and points."""
     badges = UserBadge.objects.filter(user=request.user)
-    return render(request, 'tracker.html', {'badges': badges})
+    return render(request, 'gamification/gamification.html', {
+        'badges': badges,
+        'user': request.user
+    })

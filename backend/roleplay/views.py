@@ -4,7 +4,7 @@ from .models import Roleplay
 import requests
 
 @login_required
-def roleplay_list(request):
+def roleplay_view(request):
     roleplays = Roleplay.objects.filter(user=request.user)
     if request.method == 'POST':
         scenario = request.POST.get('scenario')
@@ -26,4 +26,4 @@ def roleplay_list(request):
         except requests.RequestException:
             pass  # Handle AI service error gracefully
         return redirect('roleplay_list')
-    return render(request, 'roleplay.html', {'roleplays': roleplays})
+    return render(request, 'roleplay/roleplay.html', {'roleplays': roleplays})
