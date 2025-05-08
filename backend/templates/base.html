@@ -6,22 +6,34 @@
     <title>{% block title %}Vibrocia{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
             background: #fff;
             color: #333;
             opacity: 0;
             animation: fadeIn 1s ease-in forwards;
+            padding-top: 70px; /* for fixed navbar spacing */
         }
 
         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            padding: 12px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 50px;
-            background: transparent;
             animation: fadeIn 0.8s ease-out;
         }
 
@@ -35,12 +47,12 @@
 
         .logo::before {
             content: 'V';
-            display: inline-block;
             width: 30px;
             height: 30px;
             background: #00c4cc;
             color: white;
             border-radius: 50%;
+            display: inline-block;
             text-align: center;
             line-height: 30px;
             margin-right: 10px;
@@ -49,23 +61,40 @@
         nav {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
         }
 
         nav a {
-            color: #666;
+            color: #444;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
             transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0%;
+            height: 2px;
+            background-color: #00c4cc;
+            transition: width 0.3s ease;
         }
 
         nav a:hover {
             color: #00c4cc;
         }
 
+        nav a:hover::after {
+            width: 100%;
+        }
+
         .auth-buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .auth-buttons a {
@@ -97,16 +126,16 @@
         }
 
         .content {
-            position: relative;
-            min-height: calc(100vh - 60px);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 40px 20px;
             text-align: center;
-            padding: 20px 50px;
-            overflow: hidden;
             animation: slideIn 1s ease-out;
+            position: relative;
+            overflow: hidden;
         }
 
         .content::before,
@@ -115,6 +144,7 @@
             position: absolute;
             background: rgba(0, 196, 204, 0.1);
             border-radius: 50%;
+            z-index: -1;
         }
 
         .content::before {
@@ -122,22 +152,19 @@
             height: 300px;
             top: 10%;
             right: 10%;
-            z-index: -1;
         }
 
         .content::after {
             width: 200px;
             height: 200px;
             bottom: 20%;
-            right: 15%;
-            z-index: -1;
+            left: 10%;
         }
 
         .content h1 {
             font-size: 48px;
             font-weight: 700;
-            margin: 0;
-            line-height: 1.2;
+            margin-bottom: 20px;
         }
 
         .content h1 span {
@@ -154,6 +181,8 @@
         .content .buttons {
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .content .buttons a {
@@ -178,7 +207,7 @@
             color: #00c4cc;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .content .buttons a.watch-demo:hover {
@@ -187,27 +216,44 @@
         }
 
         footer {
-            background: transparent;
-            color: #666;
             text-align: center;
-            padding: 10px;
+            padding: 20px;
+            color: #666;
             font-size: 14px;
         }
 
-        /* Keyframe Animations */
+        /* Animations */
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes slideIn {
-            0% {
-                transform: translateY(50px);
+            from {
+                transform: translateY(30px);
                 opacity: 0;
             }
-            100% {
+            to {
                 transform: translateY(0);
                 opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .content h1 {
+                font-size: 36px;
             }
         }
     </style>
@@ -216,7 +262,7 @@
     <header>
         <div class="logo">Vibrocia</div>
         <nav>
-            <a href="{% url 'dashboard:root_dashboard' %}">DashBoard</a>
+            <a href="{% url 'dashboard:root_dashboard' %}">Dashboard</a>
             <a href="{% url 'learning:learning' %}">Learning</a>
             <a href="{% url 'challenges:challenge_list' %}">Challenges</a>
             <a href="{% url 'survey:survey_list' %}">Survey</a>
@@ -232,6 +278,7 @@
             </div>
         </nav>
     </header>
+
     <div class="content">
         {% block content %}
             <h1>Find Your Voice.<br>Build Your <span>Confidence.</span></h1>
@@ -239,13 +286,13 @@
             <div class="buttons">
                 <a href="{% url 'accounts:signup' %}" class="get-started">Get Started</a>
                 <a href="#" class="watch-demo">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    Watch Demo
                 </a>
             </div>
         {% endblock %}
     </div>
+
     <footer>
         <p>© 2025 Vibrocia. All rights reserved.</p>
     </footer>
